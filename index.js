@@ -1,34 +1,62 @@
-console.log("Bot is starting");
-
 const Twit = require("twit");
 const config = require("./config");
 const fetch = require("node-fetch");
+const schedule = require('node-schedule');
+
+//Configure Twitter API with const T
+const T = new Twit(config);
 
 
-//var T = new Twit(config);
-
-//Fetch from CVWM API and set each soldier to an array
+//Fetch from CVWM API
 const getPosts = () => {
     return fetch("https://www.veterans.gc.ca/xml/jsonp/app.cfc?method=remoteGetHonourRoll&language=en")
     .then(res => res.json())
     .then(posts => createTweetsBody(posts))
 }
 
-//Create the entire honour roll for the day (JSON objects), store it in an array 
+//Use the 'posts' response to loop through each soldier and compose the body of each tweet
 function createTweetsBody(posts) {
-        let tweetArr = [];
-    posts.days.forEach(function(post) {
-        tweetArr.push(`${post.FORENAMES} ${post.SURNAME} - ${post.DATE_OF_DEATH.substring(0, 4)}, `);        
-    });
-    splitTweetsBody(tweetArr);
-}
+    let dayTweetBody = `Today's Honour Roll recognizes ${posts.days.length} Canadians who fell on this day in history. View the CVWM Honour Roll here: https://www.veterans.gc.ca/eng/remembrance/memorials/canadian-virtual-war-memorial/honour-roll`;
+ 
+    //Tweet out initial daily tweet
+    let dayTweet = {
+        status: dayTweetBody
+    }
+    
+    T.post('statuses/update', dayTweet, dailyTweet);
+    
+    function dailyTweet(err, data, response) {
+        if (err) {
+            console.log(err);
+        } else {
+        console.log(data.text);
+        }}
 
-//Now we have the entire array of names, now split them up into individual tweets (280 characters) for Twitter
-function splitTweetsBody(tweetArr) {        
-    //console.log(tweetArr);
-    console.log(tweetArr.slice(0,4));
-}
+    //Interval function to schedule tweets every 5 min.
+    let counter = 0;
+    setInterval(function(){
+        if(counter < posts.days.length) {
+        let initTweetBody = `${posts.days[counter].FORENAMES} ${posts.days[counter].SURNAME}, who fell on this day in ${posts.days[counter].DATE_OF_DEATH.substring(0,4)}.`;
+        
+        let initTweet = {
+        status: initTweetBody
+    }
+    
+        T.post('statuses/update', initTweet, intervalTweet);
+        function intervalTweet(err, data, response) {
+            if (err) {
+                console.log(err);
+            } else {
+            console.log(data.text);
+            }}
+        
+        counter++;
+        }
+    }, 300000);
 
-//Call the function to fetch the API and load tweets
-getPosts();
+    }
+
+//Call the function each midnight to fetch the API and load tweets
+
+schedule.scheduleJob('0 0 * * *', () => { getPosts(); }) 
 
