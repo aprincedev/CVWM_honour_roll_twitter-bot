@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/drewnauts/CVWM_honour_roll_twitter-bot#readme",
   "dependencies": {
+    "node-fetch": "^2.6.0",
     "twit": "^2.2.11"
   }
 }
