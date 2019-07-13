@@ -1,0 +1,32 @@
+{
+  "name": "cvwm_honour_roll_twitter-bot",
+  "version": "1.0.0",
+  "description": "A Twitter bot derived from data from the Canadian Virtual War Memorial (CVWM) and established to allow all Canadians the opportunity to honour and remember their sacrifices.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drewnauts/CVWM_honour_roll_twitter-bot.git"
+  },
+  "keywords": [
+    "canada",
+    "vetran",
+    "remembrance",
+    "honour",
+    "death",
+    "twitter",
+    "bot"
+  ],
+  "author": "Andrew Prince",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/drewnauts/CVWM_honour_roll_twitter-bot/issues"
+  },
+  "homepage": "https://github.com/drewnauts/CVWM_honour_roll_twitter-bot#readme",
+  "dependencies": {
+    "twit": "^2.2.11"
+  }
+}
