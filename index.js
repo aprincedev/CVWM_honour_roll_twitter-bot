@@ -57,6 +57,6 @@ function createTweetsBody(posts) {
     }
 
 //Call the function each midnight to fetch the API and load tweets
-getPosts();
-///schedule.scheduleJob('0 0 * * *', () => { getPosts(); }) 
+//getPosts();
+schedule.scheduleJob('0 0 * * *', () => { getPosts(); }) 
 
